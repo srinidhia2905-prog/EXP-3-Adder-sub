@@ -18,9 +18,45 @@ half_add_sub.v	Arithmetic-circuit RTL
 half_add_sub_tb.v	Stimulus and VCD generation
 
 ### Verilog Program
-```
-```
+module basic_gates (
+ input wire a,
+ input wire b,
+ output wire y_and,
+ output wire y_or,
+ output wire y_not
+);
+ assign y_and = a & b; // AND gate
+ assign y_or = a | b; // OR gate
+ assign y_not = ~a; // NOT gate (inverter)
+endmodule
+
 ### Testbench Program
+module tb2;
+ reg a, b;
+ wire y_and, y_or, y_not;
+ // Instantiate the design under test (DUT)
+ basic_gates uut (
+ .a(a),
+ .b(b),
+ .y_and(y_and),
+ .y_or(y_or),
+ .y_not(y_not)
+ );
+ initial begin
+ // ---- VCD dump setup ----
+ $dumpfile("basic_gates.vcd"); // name of the VCD file to be generated
+ $dumpvars(0, tb2); // dump all signals in this testbench hierarchy
+ // ---- Apply all 4 input combinations ----
+ $monitor("Time=%0t a=%b b=%b | AND=%b OR=%b NOT(a)=%b", $time, a, b, y_and, y_or,
+y_not);
+ a = 0; b = 0; #10;
+ a = 0; b = 1; #10;
+ a = 1; b = 0; #10;
+ a = 1; b = 1; #10;
+ #10 $finish;
+#10;
+ end
+endmodule
 
 
 ### Truth Table
@@ -84,27 +120,10 @@ The Half Adder and Half Subtractor were realized using Verilog HDL:
 The design was compiled and simulated using Synopsys VCS, and the functionality was verified using DVE waveform analysis, matching the expected truth table.
 
 ### Output
+<img width="1600" height="845" alt="WhatsApp Image 2026-11-11 at 11 23 26 AM" src="https://github.com/user-attachments/assets/e84c2ae0-7aa9-431b-a717-981c1274faba" />
 
 
-### Viva-Voce Questions
 
-•	What is a Half Adder, and what are its limitations compared to a Full Adder?
-
-•	What is a Half Subtractor, and what does the Borrow output signify?
-
-•	Why is the Sum/Difference expression identical (A⊕B) for both circuits, while Carry and Borrow differ?
-
-•	What gate realizes the XOR function, and why is it central to both circuits?
-
-•	What is the purpose of a Verilog testbench?
-
-•	Why is a VCD file generated, and what does $dumpvars(0, tb) do?
-
-•	What is the purpose of ./simv?
-
-•	What is the difference between simulation and synthesis?
-
-•	How would you extend this design to a Full Adder/Full Subtractor?
 
 ### Result
 
